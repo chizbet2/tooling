@@ -12,9 +12,9 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: <The database name required by Tooling app >
-      MYSQL_USER: <The user required by Tooling app >
-      MYSQL_PASSWORD: <The password required by Tooling app >
+      MYSQL_DATABASE: toolingdb
+      MYSQL_USER: Admin
+      MYSQL_PASSWORD: admin.com
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db:/var/lib/mysql
