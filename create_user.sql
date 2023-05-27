@@ -1,1 +1,1 @@
-CREATE USER ''@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON * . * TO ''@'%';
+CREATE USER 'admin'@'%' IDENTIFIED BY 'ikechukwu'; GRANT ALL PRIVILEGES ON * . * TO 'admin'@'%';
