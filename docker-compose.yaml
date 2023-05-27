@@ -14,7 +14,7 @@ services:
     environment:
       MYSQL_DATABASE: toolingdb
       MYSQL_USER: Admin
-      MYSQL_PASSWORD: admin.com
+      MYSQL_PASSWORD: ikechukwu
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db:/var/lib/mysql
