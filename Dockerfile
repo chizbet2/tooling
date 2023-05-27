@@ -1,4 +1,4 @@
-FRO php:7-apache
+FROM php:7-apache
 MAINTAINER Dare dare@darey.io
 
 ENV MYSQL_IP=$MYSQL_IP
