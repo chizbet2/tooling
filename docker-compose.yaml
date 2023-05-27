@@ -13,7 +13,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: toolingdb
-      MYSQL_USER: Admin
+      MYSQL_USER: admin
       MYSQL_PASSWORD: ikechukwu
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
