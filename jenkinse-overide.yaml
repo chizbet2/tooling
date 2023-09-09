@@ -1,0 +1,90 @@
+controller:
+  # Used for label app.kubernetes.io/component
+  componentName: "jenkins-controller"
+  image: "jenkins/jenkins"
+  # tag: "2.414.1-jdk11"
+  tagLabel: jdk11
+  imagePullPolicy: "Always"
+  imagePullSecretName:
+
+  ingress:
+    enabled: true
+    apiVersion: "extensions/v1beta1"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "letsencrypt-production"
+    hostName: tooling.jenkins.mxengltd.com
+    tls:
+     - secretName: tooling.jenkins.mxengltd.com
+       hosts:
+         - tooling.jenkins.mxengltd.com
+
+ # List of plugins to be install during Jenkins controller start
+  installPlugins:
+    - kubernetes:3937.vd7b_82db_e347b_
+    - workflow-aggregator:596.v8c21c963d92d
+    - git:5.2.0
+    - configuration-as-code:1670.v564dc8b_982d0
+
+  # List of plugins to install in addition to those listed in controller.installPlugins
+  additionalPlugins:
+    - blueocean:1.25.5
+    - credentials-binding:604.vb_64480b_c56ca_
+    - git-changelog:3.0
+    - git-client:4.4.0
+    - git-server:1.9
+  
+  additionalExistingSecrets:
+    - name: github
+      keyName: github_token
+
+  JCasC:
+    configScripts:
+      welcome-message: |
+        jenkins:
+          systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'. Do not configure manually
+
+      pipeline: |
+        jobs:
+          - script: >
+              folder('project26') {
+                displayName('project26')
+                description('Contains project26 Jenkins Pipelines')
+              }
+          - script: >
+              multibranchPipelineJob('project26/tooling-app') {
+                brns-values-overide.yamlanchSources {
+                  git {
+                    remote('https://github.com/chizbet2/tooling.git')
+                    credentialsId('github')
+                    id('tooling-app')
+                   }
+                }
+              }
+      security-config: |
+        credentials:
+          system:
+             domainCredentials:
+            - credentials:
+              - usernamePassword:
+                  id: github
+                  username: chizbet2
+                  password: ${github-github_token}
+                  scope: GLOBAL
+                  description: Github
+
+ # Allows adding to the top-level security JCasC section. For legacy,  default the chart includes apiToken configurations
+
+    # Ignored if securityRealm is defined in controller.JCasC.configScripts
+    securityRealm: |-
+      local:
+        allowsSignup: false
+        enableCaptcha: false
+        users:
+        - id: "${chart-admin-username}"
+          name: "Jenkins Admin"
+          password: "${chart-admin-password}"
+    # Ignored if authorizationStrategy is defined in controller.JCasC.configScripts
+    authorizationStrategy: |-
+      loggedInUsersCanDoAnything:
+        allowAnonymousRead: false                
